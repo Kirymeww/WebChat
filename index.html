@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="violet-amethyst">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WebChat</title>
+  
+  <link rel="icon" type="image/png" href="public/Images/web.png" style="filter: invert(1);">
+  <link rel="apple-touch-icon" href="public/Images/web.png" style="filter: invert(1);">
+  
+  <link rel="stylesheet" href="public/css/normalize.css">
+  <link rel="stylesheet" href="public/css/styles.module.css">
+  <link rel="stylesheet" href="public/css/themes.module.css">
+  <link rel="stylesheet" href="public/css/mobile.css">
+  
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('savedTheme') || 'violet-amethyst';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+  
+</head>
+<body>
+  <div id="toast-container"></div>
+  <div id="modal-overlay" class="modal-overlay"></div>
+  <div id="confirm-action-modal" class="confirm-modal">
+    <h3 id="confirm-title">Подтвердите действие</h3>
+    <p id="confirm-message">Пожалуйста, заполните все обязательные поля</p>
+    <div class="confirm-actions">
+      <button id="cancel-action" class="confirm-button">Отмена</button>
+      <button id="confirm-action" class="confirm-button primary">OK</button>
+    </div>
+  </div>
+  
+  <div id="admin-confirm-modal" class="confirm-modal">
+    <h3 id="admin-confirm-title">Вход для администратора</h3>
+    <p id="admin-confirm-message">Для входа под этим именем требуется пароль администратора.</p>
+    <div class="formGroup">
+      <input type="password" id="admin-password-input" class="formInput" placeholder="Введите пароль" autocomplete="current-password">
+    </div>
+    <div class="confirm-actions">
+      <button id="admin-cancel-action" class="confirm-button">Отмена</button>
+      <button id="admin-confirm-action" class="confirm-button primary">Войти</button>
+    </div>
+  </div>
+  
+  <div id="settings-modal" class="confirm-modal">
+    <h3 id="settings-title">Настройки</h3>
+    <div class="formGroup">
+      <label class="formLabel">Тема оформления</label>
+      <div class="theme-category-buttons">
+        <button id="single-color-btn" class="theme-category-btn active">🎨 Одноцветные</button>
+        <button id="multi-color-btn" class="theme-category-btn">🌈 Многоцветные</button>
+      </div>
+      <div class="custom-select-wrapper">
+        <div id="custom-select" class="custom-select">
+          <div id="custom-select-trigger" class="custom-select__trigger">
+            <span>💜 Аметистовый фиолет</span>
+            <div class="arrow"></div>
+          </div>
+          <div id="custom-options" class="custom-options">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm-actions">
+      <button id="settings-close-button" class="confirm-button primary">Закрыть</button>
+    </div>
+  </div>
+  
+  <div id="moderator-confirm-modal" class="confirm-modal" style="display:none;">
+    <h3>Вход для модератора</h3>
+    <p id="admin-confirm-message">Для входа под этим именем требуется пароль модератора.</p>
+    <input id="moderator-password-input" type="password" placeholder="Пароль модератора" class="formInput" />
+    <div class="confirm-actions">
+      <button id="moderator-cancel-action" class="confirm-button">Отмена</button>
+      <button id="moderator-confirm-action" class="confirm-button primary">Войти</button>
+    </div>
+  </div>
+  
+  <div id="attach-modal" class="confirm-modal" style="display:none;">
+    <h3 id="attach-title">Прикрепить файл</h3>
+    <p id="attach-message">Выберите действие для прикрепления файлов</p>
+    <div id="attach-actions" class="confirm-actions">
+      <button id="attach-file-button" class="confirm-button primary">Отправить файл</button>
+      <button id="attach-cancel-button" class="confirm-button">Отмена</button>
+    </div>
+  </div>
+  
+  <div id="login-form" class="loginForm">
+    <div class="formHeader">
+      <div class="appIcon">
+        <img src="public/Images/web.png" alt="WebChat" class="appIconImg">
+      </div>
+      <div class="title-container">
+        <h2 class="formTitle">WebChat</h2>
+        <p class="subtitle">Тестовый веб-мессенджер</p>
+      </div>
+    </div>
+    
+    <form>
+      <div class="formGroup">
+        <label class="formLabel" for="username-input">Имя</label>
+        <input type="text" id="username-input" class="formInput" placeholder="Введите ваше имя" autocomplete="off">
+      </div>
+      
+      <div id="tunnel-input-group" class="formGroup">
+        <label class="formLabel" for="tunnel-url">Сервер</label>
+        <input type="text" id="tunnel-url" class="formInput" placeholder="localhost:8000 или example.com" autocomplete="off">
+      </div>
+      
+      <button type="button" id="settings-button" class="settings-button-footer" style="margin-bottom: 10px;">Настройки</button>
+      <button type="submit" id="login-button" class="submitButton">Войти</button>
+      
+      <div class="version-info">Версия 0.0.57</div>
+      
+      <div class="dev-info">
+        <span class="lead-dev">Авторы: @Kirymeww</span> 
+        <span class="other-dev">@kiequra @yurii_fisting @lovely</span>
+      </div>
+    </form>
+  </div>
+  
+  <div id="chat-container" class="container" style="display: none;">
+    <div class="mainLayout">
+      <div class="sidebar">
+        <div class="sidebarHeader">
+          <div class="headerContent">
+            <span>Участники чата</span>
+          </div>
+        </div>
+        
+        <div class="usersList">
+        </div>
+      </div>
+      
+      <div class="chatArea">
+        <div class="chatHeader">
+          <div class="chatHeaderGroupInfo">
+            <span id="group-name">Группа</span>
+          </div>
+          <div class="chatHeaderUserInfo">
+            <img id="current-user-avatar" src="public/Images/user.png" alt="User" class="userAvatar">
+            <span id="current-user-name">Никнейм</span>
+          </div>
+        </div>
+        
+        <div class="messagesContainer"></div>
+        <div id="typing-indicator" class="typingIndicator"></div>
+        
+        <div class="inputArea">
+          <textarea id="message-input" class="messageInput" placeholder="Введите сообщение..."></textarea>
+          <button id="attach-button" class="attachButton" title="Прикрепить файл">
+            <img src="public/Images/attach.png" alt="Attach" class="attachIcon">
+          </button>
+          <button id="send-button" class="sendButton">
+            <img src="public/Images/send.png" alt="Send" class="sendIcon">
+          </button>
+        </div>
+        
+        <button id="scroll-to-bottom-button" class="scrollToBottomButton" title="Прокрутить вниз" style="display: none;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="public/js/main.js"></script>
+  <script src="public/js/modals.js"></script>
+  <script src="public/js/socket.js"></script>
+  <script src="public/js/mobile.js"></script>
+</body>
+</html> 
