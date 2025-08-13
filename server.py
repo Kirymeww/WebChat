@@ -12,7 +12,7 @@ import asyncio
 from pydantic import BaseModel
 import uvicorn
 
-app = FastAPI(title="WebChat API", version="0.0.59")
+app = FastAPI(title="WebChat API", version="0.0.60")
 
 app.add_middleware(
     CORSMiddleware,
